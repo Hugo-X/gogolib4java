@@ -1,6 +1,6 @@
 gogolib.jar is a Java library used to work with [http://www.gogoboard.org GoGo Board].
 
-Currentyl it can only communicate with GoGo Server embeded in [http://www.gogoboard.org GoGo Monitor] through socket.
+Currentyl it can only communicate with _GoGo Server_ embeded in [http://www.gogoboard.org GoGo Monitor] through socket.
 It can *not* directlycontrol the local connected [http://www.gogoboard.org GoGo Board]
 
 Make sure you have the latest [http://www.gogoboard.org GoGo Monitor]

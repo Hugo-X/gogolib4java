@@ -1,0 +1,16 @@
+gogolib.jar is a Java library used to work with GoGo Board.
+Currentyl it cannot work with local connected GoGo Board.
+It can only communicate with GoGo Server embeded in GoGo Monitor through socket.
+
+Make sure you have the latest GoGo Monitor
+http://www.gogoboard.org/download
+
+This jar file can also be used as a standalone Java application
+it can be started by command:
+    java -jar gogolib.jar
+    java -jar gogolib.jar ip-address port-number
+
+You can find documentation and other files of this library at
+http://code.google.com/p/gogolib4java/downloads/list
+
+any feedback is welcome: hongyu.xiong@gmail.com

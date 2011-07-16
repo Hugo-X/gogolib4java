@@ -1,12 +1,16 @@
 #labels Phase-Implementation
-#Examples
+= Deploy =
 
-= Introduction =
+#Configure the java development environment first
+#Download the gogolib.jar 
+#Use gogolib.jar as a library for your Java program
 
-Example Codes to program
+= Code and Compile =
 
+#import kr.ac.scnu.cn.gogolib.* to your Java code which need to work with GoGo Board
+#API specification about this library is at
 
-= Example 1 =
+= SimpleGoGoClient.java =
 
 {{{
 /*

@@ -1,17 +1,21 @@
 #labels Phase-Implementation
-= Deploy =
+=Deployment=
 
-#Configure the java development environment first
-#Download the gogolib.jar 
-#Use gogolib.jar as a library for your Java program
+ # Configure the java development environment first
+ # Download the gogolib.jar 
+ # Use gogolib.jar as a library for your Java program
 
-= Code and Compile =
+----
+=Code and Compile=
 
-#import kr.ac.scnu.cn.gogolib.* to your Java code which need to work with GoGo Board
-#API specification about this library is at
+ # Add the package to your Java code where you need to use _gogolib_ by `import kr.ac.scnu.cn.gogolib.*`
+ # You can get the API specification and other documents about this library at [http://code.google.com/p/gogolib4java/downloads/list?can=2&q=docs Downloads]
+ # Be sure when you compile your Java code, gogolib.jar is in your classpath
 
-= SimpleGoGoClient.java =
+----
+=Example1. SimpleGoGoClient=
 
+===Content in SimpleGoGoClient.java===
 {{{
 /*
 * Put the gogolib.jar beside this source code
@@ -71,3 +75,6 @@ public class SimpleGoGoClient
 	} 
 }
 }}}
+
+===Compile Command===
+javac -cp gogolib.jar SimpleGoGoClient.java

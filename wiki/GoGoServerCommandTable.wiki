@@ -1,31 +1,25 @@
-||Command||Parameter||Function||Response||
-||setcom c||c¡Ê{1,2,3¡­}||set com port||S: ok||
-||connect||connect to GoGo board||S: ok||
-||F: GoGo Monitor Error: GoGo board not connected||
-||disconnect||disconnect from GoGo board||S: ok||
-||F: GoGo Monitor Error: GoGo board not connected||
-||reconnect||connect to GoGo board||S: ok||
-||F: GoGo Monitor Error: GoGo board not connected||
-||talktoport p||p¡Ê{a,b,c,d}||select a motor to be controlled||S: ok||
-||setpower l||l¡Ê{1,2,3,4,5,6,7}||set power level||S: ok ||
-||F: GoGo Monitor Error: power out of range||
-||on||Same as GoGo Monitor button [ON]||S: ok||
-||off||Same as GoGo Monitor button [OFF]||S: ok||
-||break||Same as GoGo Monitor button [Break]||S: ok||
-||coast||Same as GoGo Monitor button [Coast]||S: ok||
-||thisway||Same as GoGo Monitor button [This way]||S: ok||
-||thatway||Same as GoGo Monitor button [That way]||S: ok||
-||rd||Same as GoGo Monitor button [RD]||S: ok||
-||beep||Ask GoGo Board beep||S: ok||
-||ledon||Ask GoGo Board Turn user led on||S: ok||
-||ledoff||Ask GoGo Board Turn user led off||S: ok||
-||burston||Ask GoGo Board to run in Burst-On mode||S: ok||
-||burstoff||Ask GoGo Board to run in Burst-Off mode||S: ok||
-||sensori||i¡Ê{1,2,3,4,5,6,7,8}||Get the value of sensor i||S: The value of specified sensor||
-||F: GoGo Monitor Error: Invalid sensor number||
-||F: GoGo Monitor Error: No sensor value available||
-||sensormaxi||i¡Ê{1,2,3,4,5,6,7,8}||Get the max value of sensor i||F: GoGo Monitor Error: Invalid sensor number||
-||F: GoGo Monitor Error: No sensor value available||
-||sensormini||i¡Ê{1,2,3,4,5,6,7,8}||Get the min value of sensor i||F: GoGo Monitor Error: Invalid sensor number||
-||F: GoGo Monitor Error: No sensor value available||
-||Any other|| ||F: GoGo Monitor Error: Unrecognized command||
+#labels Phase-Implementation
+==GoGo Server Command Table (GoGo Monitor 3.4.x)==
+|| *Command* || *Parameter* || *Function* || *Successful Response* ||
+||setcom _*c*_ ||câˆˆ{1,2,3â€¦}||set com port||S: ok||
+||connect|| ||connect to GoGo board||S: ok||
+||disconnect|| ||disconnect from GoGo board||S: ok||
+||reconnect|| ||connect to GoGo board||S: ok||
+||talktoport _*p*_ ||pâˆˆ{a,b,c,d}||select a motor to be controlled||S: ok||
+||setpower _*l*_ ||lâˆˆ{1,2,3,4,5,6,7}||set power level||S: ok ||
+||on|| ||Same as GoGo Monitor button [ON]||S: ok||
+||off|| ||Same as GoGo Monitor button [OFF]||S: ok||
+||break|| ||Same as GoGo Monitor button [Break]||S: ok||
+||coast|| ||Same as GoGo Monitor button [Coast]||S: ok||
+||thisway|| ||Same as GoGo Monitor button [This way]||S: ok||
+||thatway|| ||Same as GoGo Monitor button [That way]||S: ok||
+||rd|| ||Same as GoGo Monitor button [RD]||S: ok||
+||beep|| ||Ask GoGo Board beep||S: ok||
+||ledon|| ||Ask GoGo Board Turn user led on||S: ok||
+||ledoff|| ||Ask GoGo Board Turn user led off||S: ok||
+||burston|| ||Ask GoGo Board to run in Burst-On mode||S: ok||
+||burstoff|| ||Ask GoGo Board to run in Burst-Off mode||S: ok||
+||sensor<em>*i*</em> ||iâˆˆ{1,2,3,4,5,6,7,8}||Get the value of sensor i||S: The value of specified sensor||
+||sensormax<em>*i*</em> ||iâˆˆ{1,2,3,4,5,6,7,8}||Get the max value of sensor i||S: The max-value of specified sensor||
+||sensormin<em>*i*</em> ||iâˆˆ{1,2,3,4,5,6,7,8}||Get the min value of sensor i||S: The min-value of specified sensor||
+||Any other|| || ||F: GoGo Monitor Error: Unrecognized command||

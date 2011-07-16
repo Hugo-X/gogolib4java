@@ -1,8 +1,8 @@
-gogolib.jar is a Java library used to work with GoGo Board.
-Currentyl it cannot work with local connected GoGo Board.
-It can only communicate with GoGo Server embeded in GoGo Monitor through socket.
+gogolib.jar is a Java library used to work with GoGoBoard.
+Currentyl it cannot work with local connected GoGoBoard.
+It can only communicate with GoGoServer embeded in GoGoMonitor through socket.
 
-Make sure you have the latest GoGo Monitor
+Make sure you have the latest GoGoMonitor
 http://www.gogoboard.org/download
 
 This jar file can also be used as a standalone Java application

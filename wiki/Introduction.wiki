@@ -1,9 +1,8 @@
-gogolib.jar is a Java library used to work with GoGoBoard.
-Currentyl it cannot work with local connected GoGoBoard.
-It can only communicate with GoGoServer embeded in GoGoMonitor through socket.
+gogolib.jar is a Java library used to work with [http://www.gogoboard.org GoGo Board].
+Currentyl it can only communicate with GoGo Server embeded in [http://www.gogoboard.org GoGo Monitor] through socket.
+it can *not* directlycontrol the local connected [http://www.gogoboard.org GoGo Board]
 
-Make sure you have the latest GoGoMonitor
-http://www.gogoboard.org/download
+Make sure you have the latest [http://www.gogoboard.org GoGo Monitor]
 
 This jar file can also be used as a standalone Java application
 it can be started by command:
@@ -11,6 +10,6 @@ it can be started by command:
     java -jar gogolib.jar ip-address port-number
 
 You can find documentation and other files of this library at
-http://code.google.com/p/gogolib4java/downloads/list
+[http://code.google.com/p/gogolib4java/downloads/list gogolib4java project Downloads]
 
 any feedback is welcome: hongyu.xiong@gmail.com

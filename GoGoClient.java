@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*;
 
 /**
-* Class to work with one GoGo Server embeded in GoGo Monitor
+* class to work with one GoGo Server embeded in GoGo Monitor
 */
 public class GoGoClient 
 {	

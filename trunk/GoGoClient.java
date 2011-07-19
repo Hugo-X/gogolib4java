@@ -19,13 +19,7 @@ public class GoGoClient
 	/** {@value}  */
 	public static final String CMD_BEEP = "beep";
 	/** {@value}  */
-	public static final String CMD_TALK_TO_PORTA = "talktoport a";
-	/** {@value}  */
-	public static final String CMD_TALK_TO_PORTB = "talktoport b";
-	/** {@value}  */
-	public static final String CMD_TALK_TO_PORTC = "talktoport c";
-	/** {@value}  */
-	public static final String CMD_TALK_TO_PORTD = "talktoport d";
+	public static final String CMD_TALK_TO_PORT = "talktoport"
 	/** {@value}  */
 	public static final String CMD_SET_POWER = "setpower";
 	/** {@value}  */
@@ -47,22 +41,8 @@ public class GoGoClient
 	/** {@value}  */
 	public static final String CMD_LED_OFF = "ledoff";
 	/** {@value}  */
-	public static final String CMD_READ_SENSOR1 = "sensor1";
-	/** {@value}  */
-	public static final String CMD_READ_SENSOR2 = "sensor2";
-	/** {@value}  */
-	public static final String CMD_READ_SENSOR3 = "sensor3";
-	/** {@value}  */
-	public static final String CMD_READ_SENSOR4 = "sensor4";
-	/** {@value}  */
-	public static final String CMD_READ_SENSOR5 = "sensor5";
-	/** {@value}  */
-	public static final String CMD_READ_SENSOR6 = "sensor6";
-	/** {@value}  */
-	public static final String CMD_READ_SENSOR7 = "sensor7";
-	/** {@value}  */
-	public static final String CMD_READ_SENSOR8 = "sensor8";
-	
+	public static final String CMD_SENSOR_READ = "sensor"
+    
 	/** it can be used to configure the Size of Command Message in bytes, default value is 512*/
 	public static int maxMessageSize = 512;
 	
@@ -206,17 +186,11 @@ public class GoGoClient
 	
 	/**
 	* talk to the remote GoGo Board outport
-	* @param port A:1, B:2, C:3, D:4
+	* @param port String contains character 'A', 'B', 'C' or 'D'; it can be single or combined like, "A", "B", "C", "ABC", "AD"
 	*/
-	public  void talkToPort(int port)throws IOException
+	public  void talkToPort(String port)throws IOException
 	{
-		switch(port)
-		{
-			case 1:		send(CMD_TALK_TO_PORTA); break;
-			case 2:		send(CMD_TALK_TO_PORTB); break;
-			case 3:		send(CMD_TALK_TO_PORTC); break;
-			case 4:		send(CMD_TALK_TO_PORTD); break;
-		}
+		send(CMD_TALK_TO_PORT + " " + port);
 	}
 	
 	/**
@@ -310,16 +284,12 @@ public class GoGoClient
 	*/
 	public  void readSensor(int sensor)throws IOException
 	{
-		switch(sensor){
-			case 1: send(CMD_READ_SENSOR1); break;
-			case 2: send(CMD_READ_SENSOR2); break;
-			case 3: send(CMD_READ_SENSOR3); break;
-			case 4: send(CMD_READ_SENSOR4); break;
-			case 5: send(CMD_READ_SENSOR5); break;
-			case 6: send(CMD_READ_SENSOR6); break;
-			case 7: send(CMD_READ_SENSOR7); break;
-			case 8: send(CMD_READ_SENSOR8); break;			
-		}
+        if(sensor < 1)
+			sensor = 1;
+		if(sensor > 8)
+			sensor = 8;
+            
+        send( CMD_SENSOR_READ + sensor );
 	}
 	
 	/**

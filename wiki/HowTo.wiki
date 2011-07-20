@@ -78,3 +78,6 @@ public class SimpleGoGoClient
 
 ===Compile Command===
 javac -cp gogolib.jar SimpleGoGoClient.java
+
+===Execute Command===
+java -cp .;gogolib.jar SimpleGoGoClient.java

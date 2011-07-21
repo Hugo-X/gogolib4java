@@ -19,7 +19,7 @@ public class GoGoClient
 	/** {@value}  */
 	public static final String CMD_BEEP = "beep";
 	/** {@value}  */
-	public static final String CMD_TALK_TO_PORT = "talktoport"
+	public static final String CMD_TALK_TO_PORT = "talktoport";
 	/** {@value}  */
 	public static final String CMD_SET_POWER = "setpower";
 	/** {@value}  */
@@ -41,7 +41,7 @@ public class GoGoClient
 	/** {@value}  */
 	public static final String CMD_LED_OFF = "ledoff";
 	/** {@value}  */
-	public static final String CMD_SENSOR_READ = "sensor"
+	public static final String CMD_SENSOR_READ = "sensor";
     
 	/** it can be used to configure the Size of Command Message in bytes, default value is 512*/
 	public static int maxMessageSize = 512;

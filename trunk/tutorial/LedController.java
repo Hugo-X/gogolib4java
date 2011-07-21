@@ -11,6 +11,7 @@ public class LedController
             ggClient.ledOn();
         if( argv[0].equalsIgnoreCase("off"))
              ggClient.ledOff();
+             
         System.out.println(ggClient.receive());
         ggClient.close();
     }

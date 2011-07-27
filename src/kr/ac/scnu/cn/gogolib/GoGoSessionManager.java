@@ -63,7 +63,7 @@ public class GoGoSessionManager
 		if(clientPool.isEmpty())
 			return;
 			
-		Iterator it=clientPool.values().iterator();
+		Iterator<GoGoClient> it=clientPool.values().iterator();
 		
 		while(it.hasNext()){
 			GoGoClient client=(GoGoClient)it.next();

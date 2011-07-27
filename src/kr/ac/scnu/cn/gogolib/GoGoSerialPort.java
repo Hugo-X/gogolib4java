@@ -1,4 +1,7 @@
+package kr.ac.scnu.cn.gogolib;
+
 import gnu.io.*;
+
 import java.io.*;
 import java.util.*; 
 import java.text.SimpleDateFormat;
@@ -300,14 +303,16 @@ public class GoGoSerialPort implements SerialPortEventListener
     }
     
     /** connect with GoGo Board */
-    public void	connectBoard(String appName, int acquireTimeOut, int receiveTimeOut) throws Exception{
+	@SuppressWarnings("unchecked")
+	public void	connectBoard(String appName, int acquireTimeOut, int receiveTimeOut) throws Exception{
     
         // find port by name
-        Enumeration portList = CommPortIdentifier.getPortIdentifiers() ;
+        Enumeration<CommPortIdentifier> portIdentifiers = CommPortIdentifier.getPortIdentifiers();
+		
 		CommPortIdentifier tmpPortId = null;
         
-		while (portList.hasMoreElements()) {
-			tmpPortId = (CommPortIdentifier) portList.nextElement();
+		while (portIdentifiers.hasMoreElements()) {
+			tmpPortId = portIdentifiers.nextElement();
             
 			if (tmpPortId.getName().equals(portName) && 
                     tmpPortId.getPortType() == CommPortIdentifier.PORT_SERIAL)     {

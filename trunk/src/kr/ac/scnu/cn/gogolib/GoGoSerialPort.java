@@ -726,7 +726,7 @@ public abstract class GoGoSerialPort implements SerialPortEventListener
         cmd[1] = burstBits;
         sendCommand(cmd);
         
-        System.out.println("burstBits-set-cmd = " + getHexString(cmd));
+        //System.out.println("burstBits-set-cmd = " + getHexString(cmd));
         
         GoGoWaittingForDataSize = RES_BYTES_1;
         

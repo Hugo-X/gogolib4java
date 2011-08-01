@@ -1,43 +1,80 @@
 package kr.ac.scnu.cn.gogolib;
 
 import java.io.*;
+import java.util.Vector;
 
-public class GoGoConsole
+public class GoGoConsole extends GoGoSerialPort
 {
-    public GoGoSerialPort ggsp;
+
     public ConsoleThread innerConsoleThread;
-    public GetCommandResponseThread innerCommandResponseThread;
-    public GetBurstResponseThread innerBurstResponseThread;
+    private int[] sensorValues;
     
-    public BufferedReader consoleIn;
-    public PrintStream consoleOut;
-    //public OutputStream burstOut;
-    public boolean[] cmdIsReplied;
-    public boolean[] burstOn;
-        
-    /** initialize the console */
-    public GoGoConsole(InputStream input, PrintStream output){
-        ggsp = new GoGoSerialPort();
-        
-        consoleIn = new BufferedReader(new InputStreamReader(input));
-        consoleOut = output;
-        //burstOut = new OutputStream();
-        
-        innerConsoleThread = new ConsoleThread();
-        innerCommandResponseThread = new GetCommandResponseThread();
-        innerBurstResponseThread = new GetBurstResponseThread();
-        cmdIsReplied = new boolean[1];
-        cmdIsReplied[0] = true;
-        burstOn = new boolean[1];
-        burstOn[0] = false;
+    public GoGoConsole(){
+    	sensorValues = new int[8];
+    	for(int i=0; i<8; i++)
+    		sensorValues[i] = -1;
     }
     
-    /** interprete console command and return the response type of this command */
+    @Override
+	public void burstResponseHandle(byte[] responseBytes) {		
+    	//System.out.println(getHexString(responseBytes));
+    	int sensorID = (responseBytes[0] & 0xE0) >> 5;   //sss0-00xx xxxx-xxxx
+    	int highByte = (responseBytes[0] & 0x03) << 8;
+    	int lowByte  = responseBytes[1] & 0xFF;
+    	int value = highByte + lowByte;
+    	sensorValues[sensorID] = value;
+	}
+
+	@Override
+	public void cmdResponseHandle(byte[] responseBytes) {
+		switch(responseBytes.length){
+			case 1:
+				System.out.println(getHexString(responseBytes));
+				break;
+				
+			case 2:// response for sensor reading
+				System.out.println(((responseBytes[0]&0x03)<<8) + (responseBytes[1]&0xFF));
+				break;
+				
+			case 4:
+				System.out.println(getHexString(responseBytes));
+				break;
+		}
+	}
+	
+	public void connect(){
+		Vector<String> nameList=listSerialPortNames();
+		System.out.println("--Serialporst Name List: ");
+		for(String name:nameList){
+			System.out.print(name+" ");
+		}
+		System.out.print("\n--please input the name of port you want to use: ");
+		BufferedReader insReader = new BufferedReader(new InputStreamReader(System.in));
+		String portName = null;
+		
+		try {
+			portName = insReader.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		setPort(portName.toUpperCase());
+		
+        try{
+        	connectBoard("GoGo Console", 2000, 6000);
+        }catch(Exception ex){
+            ex.printStackTrace();
+            System.exit(1);
+        }
+        
+        System.out.println("--Ready for command--");
+	}
+	/** interpret console command and return the response type of this command */
     public int consoleCommandInterpreter(String inputCommand){
         String[] cmds;
         String cmd, arg;
-        
-        inputCommand.trim();
+                
         cmds = inputCommand.split("[\\s,]+");
         
         cmd = cmds[0];
@@ -47,214 +84,125 @@ public class GoGoConsole
             arg = null;
             
         if(cmd.equalsIgnoreCase("quit")||cmd.equalsIgnoreCase("exit"))
-            return 0;
-            
-        if(cmd.equalsIgnoreCase("beep")){
-            ggsp.beep();
             return 1;
+
+        if(cmd.equalsIgnoreCase("display")){        	
+	    	for(int i=0; i<7; i++){
+	    		System.out.print(sensorValues[i]+" ");
+	    	}
+	    	System.out.print(sensorValues[7]+" ");
+	    	return 0;
+        }
+        
+        if(cmd.equalsIgnoreCase("beep")){
+            beep();
+            return 0;
         }
         
         if(cmd.equalsIgnoreCase("ledon")){
-            ggsp.ledOn();
-            return 1;
+            ledOn();            
+            return 0;
         }
         
         if(cmd.equalsIgnoreCase("ledoff")){
-            ggsp.ledOff();
-            return 1;
+            ledOff();
+            return 0;
         }
             
         if(cmd.equalsIgnoreCase("motoron")){
-            ggsp.motorOn();
-            return 1;
+            motorOn();
+            return 0;
         }
         
         if(cmd.equalsIgnoreCase("motoroff")){
-            ggsp.motorOff();
-            return 1;
+            motorOff();
+            return 0;
         }
         
         if(cmd.equalsIgnoreCase("ping")){
-            ggsp.ping();
-            return 4;
+            ping();
+            return 0;
         }
         
         if(cmd.equalsIgnoreCase("sensor")){
             if(arg == null)
                 return -1;
-            ggsp.readSensor(Integer.parseInt(arg));
-            return 2;
+            readSensor(Integer.parseInt(arg));
+            return 0;
         }
         
         if(cmd.equalsIgnoreCase("burst")){
             if(arg == null)
                 return -1;
             int burstBits = Integer.parseInt(arg);
-            byte[] b = {(byte)burstBits};
-            consoleOut.println("burstBits = " + getHexString(b));
-            ggsp.setBurst(burstBits);
-            synchronized(burstOn){
-                if(burstBits > 0){
-                    burstOn[0] = true;
-                    burstOn.notify();
-                }else{
-                    burstOn[0] = false;            
-                }
-            }
-            return 1;
+            setBurst(burstBits);
+            return 0;
         }
         
         // invalid command
         return -1;
-    }
+    }    
     
-    /** connect to the gogoboard specified by portName*/
-    public void connectBoard(String appName, String portName, int acquireTimeOut, int receiveTimeOut){
-        ggsp.setPort(portName);
-        try{
-            ggsp.connectBoard(portName, acquireTimeOut, receiveTimeOut);
-        }catch(Exception ex){
-            ex.printStackTrace();
-            System.exit(1);
-        }
-    }
     
     /** inner class of ConsoleThread */    
-    public class ConsoleThread extends Thread{
-    
+    public class ConsoleThread extends Thread{    
         String inputCommand = null;
-        
-        public void exit(){
-            //consoleOut.println("ConsoleThread is going to exit");
-            if(innerCommandResponseThread.isAlive()){
-                innerCommandResponseThread.interrupt();
-                //ggc.consoleOut.println("interrupt innerCommandResponseThread");
-            }
-            
-            if(innerBurstResponseThread.isAlive()){
-                innerBurstResponseThread.interrupt();
-                //ggc.consoleOut.println("interrupt innerBurstResponseThread");
-            }            
-            System.exit(0); // exit the application
-        }
-        
-        public void run(){
-            
-            consoleOut.println("type quit to leave");            
-
+        int reCode = 0;
+        public void run(){            
+        	BufferedReader insReader = new BufferedReader(new InputStreamReader(System.in));
             while(true){
                 //consoleOut.print(">>");
                 try{
-                    inputCommand = consoleIn.readLine();
+                    inputCommand = insReader.readLine();
                 }catch(IOException ex){
                     ex.printStackTrace();
                 }
-                
+                inputCommand.trim();
                 if(inputCommand == null || inputCommand.equals(""))
                     continue;
                 
-                switch(consoleCommandInterpreter(inputCommand)){
-                    case 0:
-                        exit(); // to exit
-                        break;
-                    case 1:
-                        ggsp.GoGoWaittingForDataSize = GoGoSerialPort.RES_BYTES_1;
-                        break;
-                    case 2:
-                        ggsp.GoGoWaittingForDataSize = GoGoSerialPort.RES_BYTES_2;
-                        break;
-                    case 3:
-                        break; // control burst mode
-                    case 4:
-                        ggsp.GoGoWaittingForDataSize = GoGoSerialPort.RES_BYTES_4;
-                        break;
-                    default:
-                        consoleOut.println("InvalidCommand");
-                        continue;
-                }                
-                ggsp.GoGoSPCPStatus = GoGoSerialPort.WAITTING_FOR_RES_OR_BURST_HEADER;                
+                reCode = consoleCommandInterpreter(inputCommand);
                 
-                //innerBurstResponseThread.start();
-                if(!innerCommandResponseThread.isAlive()){
-                    //consoleOut.println("!innerCommandResponseThread is not Alive");
-                    innerCommandResponseThread.start();
-                }else{
-                    //consoleOut.println("innerCommandResponseThread is Alive ");
-                }
-                
-                synchronized(cmdIsReplied){
-                    cmdIsReplied[0] = false;
-                    cmdIsReplied.notify();
-                    
-                    try{
-                        if(!cmdIsReplied[0])
-                            cmdIsReplied.wait();
-                    }catch(InterruptedException ex){
-                        ex.printStackTrace();
-                    }
-                }
+                if(reCode == 1)
+                	break;
+                else if(reCode == -1)
+                	System.out.println("invalid command");
             }
         }
     }
     
-    /** inner class of GetCommandResponseThread */
-    public class GetCommandResponseThread extends Thread{
-        String responseHex;
+    public void startConsole(){
+    	startSPCP();    	
+    	// start the console, commandResponse, burstResponse threads
+    	innerConsoleThread = new ConsoleThread();
+    	innerConsoleThread.start();        
         
-        public void run(){            
-            while(true){
-                try{
-                    //consoleOut.println("GetCommandResponseThread is running");
-                    
-                    synchronized(cmdIsReplied){
-                        // do not need to get command responsed until cmdIsReplied is false
-                        if(cmdIsReplied[0]){
-                            //consoleOut.println("GetCommandResponseThread is waiting...");
-                            cmdIsReplied.wait();
-                        }
-                        
-                        responseHex = getHexString(ggsp.getCommandResponse());
-                        consoleOut.println(responseHex);
-                    
-                        cmdIsReplied[0] = true;
-                        cmdIsReplied.notify();
-                    }
-                    
-                }catch(InterruptedException ex){
-                    //ex.printStackTrace();                    
-                    break;
-                }
-            }
-        }
+        // finish until the innerConsoleThread terminated
+        try {
+			innerConsoleThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
     }
     
-    /** inner class of GetBurstResponseThread */
-    public class GetBurstResponseThread extends Thread{        
-        public void run(){             
-            while(true){
-                try{
-                    synchronized(burstOn){
-                        if(!burstOn[0]){
-                            consoleOut.println("GetBurstResponseThread is waiting...");
-                            burstOn.wait();
-                        }                       
-                        burstResponseHandle(ggsp.getBurstResponse());                        
-                    }                    
-                }catch(InterruptedException ex){
-                    //ex.printStackTrace();                    
-                    break;
-                }
-            }
-        }
+    public void stopConsole(){
+		stopSPCP();
+		disconnectBoard();
     }
     
-    /** display or print the burst response*/
-    public void burstResponseHandle(byte[] responseBytes){
-        String responseHex;        
-        responseHex = getHexString(responseBytes);
-        consoleOut.println("burst,"+responseHex);
+    public static void main(String[] args){
+    	
+        GoGoConsole ggc = new GoGoConsole();
+        
+        //GoGoSerialPort.debugOut = System.err;
+        
+        ggc.connect();
+        ggc.startConsole();
+        ggc.stopConsole();
+        System.exit(0); // exit the application        
     }
-    
+
     //---------------utilities---------------------    
     static final String HEXES = "0123456789ABCDEF";    
     public static String getHexString( byte [] raw ) {
@@ -267,23 +215,9 @@ public class GoGoConsole
             .append(HEXES.charAt((b & 0x0F)));
         }
         return hex.toString();
-    }    
-    //----------------------------------------------
-    
-    public static void main(String[] args){
-                
-        GoGoConsole ggc = new GoGoConsole(System.in, System.out);        
-        ggc.connectBoard("GoGo Console", args[0], 2000, 6000);
-        ggc.innerConsoleThread.start();
-        ggc.innerBurstResponseThread.start();
-        /*
-        try{
-            ggc.innerConsoleThread.join();        
-        }catch(InterruptedException ex){
-            ex.printStackTrace();
-        }*/       
-        
     }
+    //----------------------------------------------
+	
 }
 
 

@@ -15,7 +15,9 @@ import javax.swing.JDialog;
 
 import javax.swing.JTextPane;
 import java.awt.GridLayout;
-
+/** 
+ * a GUI application to manipulate local connected GoGo Board
+ **/
 
 public class GoGoMonitor extends GoGoSerialPort
 {

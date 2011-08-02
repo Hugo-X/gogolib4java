@@ -5,7 +5,9 @@ import gnu.io.*;
 import java.io.*;
 import java.util.*; 
 import java.text.SimpleDateFormat;
-
+/**
+* class to work with local connected GoGo Board
+*/
 public abstract class GoGoSerialPort implements SerialPortEventListener
 {
     /**
@@ -75,15 +77,15 @@ public abstract class GoGoSerialPort implements SerialPortEventListener
     public static final int RES_BYTES_4 = 4;
     
     // debug utility
-    public static PrintStream debugOut;
+    protected static PrintStream debugOut;
     //**************************************************************    
     
     /**
     * connection scope
     */
     //protected PushbackInputStream inputStream;
-    protected InputStream inputStream;
-    protected OutputStream outputStream ;   
+    private InputStream inputStream;
+    private OutputStream outputStream;
     
     private int GoGoSPCPStatus;
 	private int GoGoWaittingForDataSize;    
@@ -154,7 +156,7 @@ public abstract class GoGoSerialPort implements SerialPortEventListener
     //----------------------------------------------
     
     /** send command to serial port */ 
-    public void sendCommand(byte []cmdBytes){
+    private void sendCommand(byte []cmdBytes){
         try{
             outputStream.write(new byte[]{CMD_HEADER1,CMD_HEADER2});
             outputStream.write(cmdBytes);
@@ -185,7 +187,7 @@ public abstract class GoGoSerialPort implements SerialPortEventListener
   
     
     /** read serial input*/
-    public void getBytesFromSerialPort(){
+    private void getBytesFromSerialPort(){
     	byte[] tmpBuffer = new byte[1024];
     	int n = 0;
     	try {
@@ -272,7 +274,7 @@ public abstract class GoGoSerialPort implements SerialPortEventListener
 	}    
     
     /** inner ResponseProcessThread to handle the serial port input data and communication status*/
-    public class ResponseProcessThread extends Thread{
+    private class ResponseProcessThread extends Thread{
     	byte inByte = 0x00;
 		//boolean inByteUpdated = false;
 		
@@ -405,7 +407,7 @@ public abstract class GoGoSerialPort implements SerialPortEventListener
     }
     
     /** inner class of GetCommandResponseThread */
-    public class GetCommandResponseThread extends Thread{
+    private class GetCommandResponseThread extends Thread{
         byte[] responseBytes;
         
         public void run(){
@@ -455,7 +457,7 @@ public abstract class GoGoSerialPort implements SerialPortEventListener
     }
     
     /** inner class of GetBurstResponseThread */
-    public class GetBurstResponseThread extends Thread{
+    private class GetBurstResponseThread extends Thread{
     	
     	byte []responseBytes;
 

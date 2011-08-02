@@ -2,7 +2,9 @@ package kr.ac.scnu.cn.gogolib;
 
 import java.io.*;
 import java.util.Vector;
-
+/** 
+ * a Command-Line application to manipulate local connected GoGo Board
+ **/
 public class GoGoConsole extends GoGoSerialPort
 {
 
@@ -71,7 +73,7 @@ public class GoGoConsole extends GoGoSerialPort
         System.out.println("--Ready for command--");
 	}
 	/** interpret console command and return the response type of this command */
-    public int consoleCommandInterpreter(String inputCommand){
+    private int consoleCommandInterpreter(String inputCommand){
         String[] cmds;
         String cmd, arg;
                 
@@ -145,7 +147,7 @@ public class GoGoConsole extends GoGoSerialPort
     
     
     /** inner class of ConsoleThread */    
-    public class ConsoleThread extends Thread{    
+    private class ConsoleThread extends Thread{    
         String inputCommand = null;
         int reCode = 0;
         public void run(){            

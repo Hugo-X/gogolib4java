@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" author="true" classpath="lib/RXTXcomm.jar" destdir="doc" doctitle="gogolib API Specification" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="kr.ac.scnu.cn.gogolib" source="1.6" sourcepath="src" splitindex="true" use="true" version="true">
+            <link href="file:/D:/workspace/gogolib4java/doc/"/>
+        </javadoc>
+    </target>
+</project>

@@ -50,7 +50,7 @@ public class GoGoMonitor extends GoGoSerialPort
 	private JCheckBox jCheckBoxSensor5 = null;
 	private JCheckBox jCheckBoxSensor6 = null;
 	private JCheckBox jCheckBoxSensor7 = null;
-	private JDialog jDialog = null;  //  @jve:decl-index=0:visual-constraint="443,38"
+	private JDialog jDialog = null;  //  @jve:decl-index=0:visual-constraint="605,96"
 	private JPanel jContentPane1 = null;
 	private JTextPane jTextPane = null;
 

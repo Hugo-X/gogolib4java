@@ -21,11 +21,11 @@ import java.awt.GridLayout;
 
 public class GoGoMonitor extends GoGoSerialPort
 {
-	JTextField[] jTextFieldSensorArray;
+	JTextField[] jTextFieldArray;
 	int[] sensorValueArray;
-	JCheckBox[] jCheckBoxSensorArray;
+	JCheckBox[] jCheckBoxArray;
 	private JButton jButtonBeep = null;
-	private JFrame jFrame = null;  //  @jve:decl-index=0:visual-constraint="125,12"
+	private JFrame jFrame = null;  //  @jve:decl-index=0:visual-constraint="139,41"
 	private JPanel jContentPane = null;
 	private JButton jButtonPing = null;
 	
@@ -50,7 +50,7 @@ public class GoGoMonitor extends GoGoSerialPort
 	private JCheckBox jCheckBoxSensor5 = null;
 	private JCheckBox jCheckBoxSensor6 = null;
 	private JCheckBox jCheckBoxSensor7 = null;
-	private JDialog jDialog = null;  //  @jve:decl-index=0:visual-constraint="627,74"
+	private JDialog jDialog = null;  //  @jve:decl-index=0:visual-constraint="443,38"
 	private JPanel jContentPane1 = null;
 	private JTextPane jTextPane = null;
 
@@ -60,9 +60,9 @@ public class GoGoMonitor extends GoGoSerialPort
 		
     	for(int i=0; i<8; i++){
     		if(sensorValueArray[i]!=-1)
-    			jTextFieldSensorArray[i].setText(""+sensorValueArray[i]);
+    			jTextFieldArray[i].setText(""+sensorValueArray[i]);
     		else
-    			jTextFieldSensorArray[i].setText("N/A");
+    			jTextFieldArray[i].setText("N/A");
     	}
 	}
 	@Override
@@ -71,10 +71,8 @@ public class GoGoMonitor extends GoGoSerialPort
     	int highByte = (responseBytes[0] & 0x03) << 8;
     	int lowByte  = responseBytes[1] & 0xFF;
     	int value = highByte + lowByte;
-    	//String HexValue = getHexString(responseBytes);
-    	//TextSensorValue[sensorID].setText(sensorID+":"+value+" " + HexValue);    	
-    	if(jCheckBoxSensorArray[sensorID].isSelected())
-    		sensorValueArray[sensorID] = value;
+ 	
+		sensorValueArray[sensorID] = value;
     	
     }
 	
@@ -149,10 +147,10 @@ public class GoGoMonitor extends GoGoSerialPort
 	private JFrame getJFrame() {
 		if (jFrame == null) {
 			jFrame = new JFrame();
+			jFrame.setLocationRelativeTo(null);
 			jFrame.setSize(new Dimension(442, 238));
 			jFrame.setTitle("GoGo Monitor by Java");
 			jFrame.setContentPane(getJContentPane());
-			jFrame.setLocationRelativeTo(null);
 			jFrame.addWindowListener(new java.awt.event.WindowAdapter() {
 				public void windowClosing(java.awt.event.WindowEvent e) {
 					exit();
@@ -161,25 +159,25 @@ public class GoGoMonitor extends GoGoSerialPort
 		}
 		
 		//map the sensor TextFiled
-		jTextFieldSensorArray = new JTextField[8];	
-		jTextFieldSensorArray[0] = jTextSensor0;
-		jTextFieldSensorArray[1] = jTextSensor1;
-		jTextFieldSensorArray[2] = jTextSensor2;
-		jTextFieldSensorArray[3] = jTextSensor3;
-		jTextFieldSensorArray[4] = jTextSensor4;
-		jTextFieldSensorArray[5] = jTextSensor5;
-		jTextFieldSensorArray[6] = jTextSensor6;
-		jTextFieldSensorArray[7] = jTextSensor7;
+		jTextFieldArray = new JTextField[8];	
+		jTextFieldArray[0] = jTextSensor0;
+		jTextFieldArray[1] = jTextSensor1;
+		jTextFieldArray[2] = jTextSensor2;
+		jTextFieldArray[3] = jTextSensor3;
+		jTextFieldArray[4] = jTextSensor4;
+		jTextFieldArray[5] = jTextSensor5;
+		jTextFieldArray[6] = jTextSensor6;
+		jTextFieldArray[7] = jTextSensor7;
 		
-		jCheckBoxSensorArray = new JCheckBox[8];	
-		jCheckBoxSensorArray[0] = jCheckBoxSensor0;
-		jCheckBoxSensorArray[1] = jCheckBoxSensor1;
-		jCheckBoxSensorArray[2] = jCheckBoxSensor2;
-		jCheckBoxSensorArray[3] = jCheckBoxSensor3;
-		jCheckBoxSensorArray[4] = jCheckBoxSensor4;
-		jCheckBoxSensorArray[5] = jCheckBoxSensor5;
-		jCheckBoxSensorArray[6] = jCheckBoxSensor6;
-		jCheckBoxSensorArray[7] = jCheckBoxSensor7;
+		jCheckBoxArray = new JCheckBox[8];	
+		jCheckBoxArray[0] = jCheckBoxSensor0;
+		jCheckBoxArray[1] = jCheckBoxSensor1;
+		jCheckBoxArray[2] = jCheckBoxSensor2;
+		jCheckBoxArray[3] = jCheckBoxSensor3;
+		jCheckBoxArray[4] = jCheckBoxSensor4;
+		jCheckBoxArray[5] = jCheckBoxSensor5;
+		jCheckBoxArray[6] = jCheckBoxSensor6;
+		jCheckBoxArray[7] = jCheckBoxSensor7;
 		return jFrame;
 	}
 
@@ -192,7 +190,7 @@ public class GoGoMonitor extends GoGoSerialPort
 		if (jContentPane == null) {
 			jLabelAboutBoard = new JLabel();
 			jLabelAboutBoard.setBounds(new Rectangle(144, 16, 273, 23));
-			jLabelAboutBoard.setText("Board and Firmware information...");
+			jLabelAboutBoard.setText("");
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
 			jContentPane.add(getjTextSensor0(), null);
@@ -410,7 +408,7 @@ public class GoGoMonitor extends GoGoSerialPort
 		int burstBits = 0;
 		
 		for (int i=0; i<8; i++){
-			if(jCheckBoxSensorArray[i].isSelected())
+			if(jCheckBoxArray[i].isSelected())
 				burstBits |= 1<<i;
 			else
 				sensorValueArray[i] = -1;
@@ -442,8 +440,19 @@ public class GoGoMonitor extends GoGoSerialPort
 	}
 	
 	public void stopMonitor(){
+		//disconnect
 		stopSPCP();
 		disconnectBoard();
+		
+		//clear UI
+		jLabelAboutBoard.setText("");
+		setEnableButtons(false);
+		for(int i=0; i<8; i++){
+			sensorValueArray[i] = -1;
+			this.jCheckBoxArray[i].setSelected(false);
+		}
+		
+		
 	}
 	
 	/**
@@ -597,6 +606,12 @@ public class GoGoMonitor extends GoGoSerialPort
 			jDialog.setSize(new Dimension(241, 119));
 			jDialog.setTitle("Exception");
 			jDialog.setContentPane(getJContentPane1());
+			jDialog.addWindowListener(new java.awt.event.WindowAdapter() {
+				public void windowClosing(java.awt.event.WindowEvent e) {
+					System.out.println("windowClosing()"); // TODO Auto-generated Event stub windowClosing()
+					jDialog.setVisible(false);
+				}
+			});
 			jDialog.setLocationRelativeTo(getJFrame());
 		}
 		return jDialog;

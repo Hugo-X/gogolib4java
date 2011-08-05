@@ -13,6 +13,6 @@
         <delete dir="jar/GoGoMonitor_lib"/>
         <mkdir dir="jar/GoGoMonitor_lib"></mkdir>
         <copy file="lib/RXTXcomm.jar " todir="jar/GoGoMonitor_lib"></copy>
-        <copy file="lib/rxtxSerial.dll" todir="jar/GoGoMonitor_lib"></copy>
+        <copy file="lib/rxtxSerial.dll" todir="jar/GoGoMonitor_lib"></copy>    	
     </target>
 </project>

@@ -14,6 +14,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 
 import javax.swing.JTextPane;
+
+import org.apache.log4j.Logger;
+
 import java.awt.GridLayout;
 /** 
  * a GUI application to manipulate local connected GoGo Board
@@ -21,6 +24,8 @@ import java.awt.GridLayout;
 
 public class GoGoMonitor extends GoGoSerialPort
 {
+	private static final Logger logger = Logger.getLogger(GoGoMonitor.class);
+	
 	JTextField[] jTextFieldArray;
 	int[] sensorValueArray;
 	JCheckBox[] jCheckBoxArray;
@@ -80,11 +85,11 @@ public class GoGoMonitor extends GoGoSerialPort
 	public void cmdResponseHandle(byte[] responseBytes) {
 		switch(responseBytes.length){
 			case 1:
-				System.out.println(getHexString(responseBytes));
+				logger.debug(getHexString(responseBytes));
 				break;
 				
 			case 2:// response for sensor reading
-				System.out.println(((responseBytes[0]&0x03)<<8) + (responseBytes[1]&0xFF));
+				logger.debug(((responseBytes[0]&0x03)<<8) + (responseBytes[1]&0xFF));
 				break;
 				
 			case 4:
@@ -417,7 +422,7 @@ public class GoGoMonitor extends GoGoSerialPort
 		return burstBits;
 	}
 	public void startMonitor(){
-		//System.out.println("selected port name: " + jComboBoxPortNames.getSelectedItem());
+		logger.debug("selected port name: " + jComboBoxPortNames.getSelectedItem());
 		setPort(jComboBoxPortNames.getSelectedItem().toString());
 		try {
 			connectBoard("GoGo Monitor", 2000, 6000);
@@ -608,7 +613,7 @@ public class GoGoMonitor extends GoGoSerialPort
 			jDialog.setContentPane(getJContentPane1());
 			jDialog.addWindowListener(new java.awt.event.WindowAdapter() {
 				public void windowClosing(java.awt.event.WindowEvent e) {
-					System.out.println("windowClosing()"); // TODO Auto-generated Event stub windowClosing()
+					logger.debug("windowClosing()"); 
 					jDialog.setVisible(false);
 				}
 			});
@@ -658,10 +663,9 @@ public class GoGoMonitor extends GoGoSerialPort
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				logger.debug(e);
 			}
 		}
-        //GoGoSerialPort.debugOut=System.err;
 	}
 	
 }

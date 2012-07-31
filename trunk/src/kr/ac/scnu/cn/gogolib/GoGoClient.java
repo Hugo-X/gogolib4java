@@ -317,10 +317,7 @@ public class GoGoClient
 			port=Integer.parseInt(argv[1]);
 		}
 		
-		ggClient = new GoGoClient(host, port);		
-		
-		if(ggClient == null)
-			return;
+		ggClient = new GoGoClient(host, port);	
 			
 		System.out.print("Connected with GoGo Server@"+host+":"+port+"(Type Q or q to Quit)\n>");
 		

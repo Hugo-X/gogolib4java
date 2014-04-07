@@ -16,7 +16,6 @@
   		<groupId>org.rxtx</groupId>
   		<artifactId>rxtx</artifactId>
   		<version>2.1.7</version>
-  		<scope>runtime</scope>
   	</dependency>
   </dependencies>
 </project>
